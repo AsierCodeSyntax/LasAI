@@ -1,0 +1,55 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc} % Lo dejamos comentado por si no tienes instalada la tipografía lmodern
+% \usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{graphicx} % NUEVO: Paquete para insertar imágenes
+
+% Le decimos a LaTeX dónde buscar las imágenes
+\graphicspath{{../src/templates/img/}}
+
+% Colores y estilos corporativos
+\definecolor{primary}{RGB}{41, 128, 185}
+\definecolor{darkgray}{RGB}{80, 80, 80}
+\hypersetup{colorlinks=true, linkcolor=primary, urlcolor=primary}
+\titleformat{\section}{\Large\bfseries\color{primary}}{}{0em}{}[\titlerule]
+
+\begin{document}
+
+% PORTADA PERSONALIZADA CON LOGO DE EMPRESA
+\begin{center}
+    \vspace*{1cm}
+    \includegraphics[width=0.4\textwidth]{CodeSyntaxLogoa.png} \\[1.5cm]
+    {\Huge \textbf{\color{primary}TechWatch Astekaria}} \\[0.5cm]
+    {\Large \textit{Zaintza Teknologikoko Buletina}} \\[1cm]
+    {\large \textbf{Data:} << date >>} \\[1.5cm]
+\end{center}
+
+\begin{abstract}
+\noindent Zaintza teknologikoko asteko buletina. Adimen Artifizialaren bidez laburbildutako eta modu semantikoan sailkatutako azken berriak biltzen ditu, sektoreko joera nagusiak aztertuz.
+\end{abstract}
+
+\vspace{1cm}
+
+% Dinamic blucle for all sections
+<% for section in sections %>
+\section*{%
+<% if section.base_slug == 'plone' %>\includegraphics[height=14pt]{PloneLogoa.png}\hspace{0.4cm}%
+<% elif section.base_slug == 'django' %>\includegraphics[height=14pt]{DjangoLogoa.png}\hspace{0.4cm}%
+<% elif section.base_slug == 'ai' %>\includegraphics[height=14pt]{AALogoa.png}\hspace{0.4cm}%
+<% endif %><< section.name | escape_tex >>}
+
+\begin{itemize}
+<% for item in section['items'] %>
+    \item \textbf{<< item.title | escape_tex >>} \hfill {\color{darkgray}\textit{Garrantzia: << item.llm_score >>/10}} \\
+    << item.summary_short | escape_tex >> \\
+    {\footnotesize \url{<< item.url | escape_tex >>}} \vspace{0.3cm}
+<% endfor %>
+\end{itemize}
+
+<% endfor %>
+
+\end{document}

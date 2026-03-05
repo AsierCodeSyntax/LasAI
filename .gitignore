@@ -1,0 +1,34 @@
+# Python: Archivos temporales y compilados
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Base de datos y persistencia local (ESTO ES CRÍTICO)
+# No queremos subir la base de datos entera, solo el código
+postgres_data/
+qdrant_data/
+*.db
+*.sqlite3
+
+# Secretos y Configuración (NUNCA SUBIR ESTO)
+.env
+.env.local
+secrets.yaml
+
+# Build y Logs
+build/
+dist/
+*.log
+cron_worker.log
+
+# Node.js (si tienes el frontend en la misma carpeta)
+node_modules/
+.next/
+out/
+
+# Varios
+.DS_Store
+.vscode/

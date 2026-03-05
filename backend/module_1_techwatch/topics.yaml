@@ -1,0 +1,69 @@
+ai:
+  name: Artificial Intelligence
+  color: '#D8B4FE'
+  keywords:
+  - llm
+  - machine learning
+  - gpt
+  - claude
+  - gemini
+  - llama
+  - mistral
+  - deepseek
+  - moe
+  - cve
+  - sota
+  - rag
+  - agents
+django:
+  name: Django / Python
+  color: '#86EFAC'
+  keywords:
+  - django
+  - python
+  - drf
+  - celery
+  - postgresql
+  - release
+  - security
+  - cve
+  - lts
+  - orm
+plone:
+  name: Plone CMS
+  color: '#93C5FD'
+  keywords:
+  - plone
+  - volto
+  - zope
+  - guillotina
+  - plone foundation
+  - release
+  - security advisory
+  - hotfix
+  - core
+ciberseguridad:
+  name: Ciberseguridad
+  color: '#EF4444'
+  keywords:
+  - vulnerabilidad
+  - zero-day
+  - malware
+  - brecha
+  - parche
+  - ransomware
+  - exploit
+  - phishing
+  - cve
+example:
+  name: Example
+  color: '#84CC16'
+  keywords:
+  - dede
+  - grewgwreg
+  - gred
+  - ffinf
+  - nduuea
+  - fufrr
+  - jifrfr
+  - fjifa

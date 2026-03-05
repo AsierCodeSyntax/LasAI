@@ -1,0 +1,39 @@
+ai:
+  rss:
+  - name: Proceedings of Machine Learning Research
+    score: 8
+    url: https://proceedings.mlr.press/v49/feed.xml
+  - name: Journal of Machine Learning Research
+    score: 9
+    url: https://jmlr.csail.mit.edu/jmlr.xml
+  - name: Journal of Machine Learning Research
+    score: 9
+    url: https://jmlr.org/jmlr.xml
+  - name: Journal of Machine Learning Research
+    score: 10
+    url: https://www.jmlr.org/jmlr.xml
+  - name: Proceedings of Machine Learning Research
+    score: 9
+    url: https://proceedings.mlr.press/v7/feed.xml
+django:
+  rss:
+  - name: Kraken Engineering
+    score: 1
+    url: https://engineering.kraken.tech/feed.xml
+  - name: Oseh Frank's blog
+    score: 7
+    url: https://www.osehfrank.com/blog/feed/rss/
+  - name: Nitin Raturi's Blog
+    score: 6
+    url: https://tech.raturi.in/feed
+  - name: Dzhavat Ushev Blog
+    score: 6
+    url: https://dzhavat.github.io/feed.xml
+  - name: Uki D. Lucas Blog
+    score: 5
+    url: https://ukidlucas.github.io/feed.xml
+plone:
+  rss:
+  - name: Plone Beginner
+    score: 5
+    url: https://plonebeginner.blogspot.com/feeds/posts/default
