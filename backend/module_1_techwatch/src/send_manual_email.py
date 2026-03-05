@@ -10,16 +10,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def send_email_direct(subject: str, body: str, attachment_path: str) -> str:
-    """Native Python function to send SMTP email, without relying on agents."""
-    recipient_email = "aiglesias@codesyntax.com"
+    """Native Python function to send SMTP email, forcing TLS connection."""
+    recipient_email = "aiglesias@codesyntax.eus"
     print(f"📧 [API] Preparing to send email to {recipient_email}...")
     
-    sender_email = os.environ.get("GMAIL_ADDRESS")
-    app_password = os.environ.get("GMAIL_APP_PASSWORD")
+    # 1. Leer credenciales dinámicas
+    smtp_host = os.environ.get("SMTP_HOST", "178.104.28.80")
+    smtp_port = int(os.environ.get("SMTP_PORT", 587))
+    smtp_user = os.environ.get("SMTP_USER", "")
+    smtp_pass = os.environ.get("SMTP_PASS", "")
+    sender_email = os.environ.get("SENDER_EMAIL", "lasIA@korpoweb.com")
     
-    if not sender_email or not app_password:
-        return "❌ Error: Missing credentials. Define GMAIL_ADDRESS and GMAIL_APP_PASSWORD in your environment."
-        
     if not os.path.exists(attachment_path):
         return f"❌ Error: The attachment does not exist at the path: {attachment_path}"
         
@@ -41,9 +42,27 @@ def send_email_direct(subject: str, body: str, attachment_path: str) -> str:
             filename=pdf_name
         )
         
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(sender_email, app_password)
-            smtp.send_message(msg)
+        # 2. Lógica para conectar FORZANDO TLS (STARTTLS)
+        print(f"   -> Connecting to {smtp_host}:{smtp_port} with TLS...")
+        
+        if smtp_port == 465:
+            # Puerto 465 es el único que usa SSL directo tradicional
+            with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=15) as smtp:
+                if smtp_user and smtp_pass:
+                    smtp.login(smtp_user, smtp_pass)
+                smtp.send_message(msg)
+        else:
+            # Puertos 587 o 25 requieren activar TLS explícitamente
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=15) as smtp:
+                smtp.ehlo()           # 1. Saluda al servidor
+                smtp.starttls()       # 2. 🔥 ACTIVA TLS COMO PIDIÓ EL SYSADMIN 🔥
+                smtp.ehlo()           # 3. Vuelve a saludar por el túnel seguro
+                
+                # Si hay usuario/contraseña, se autentica
+                if smtp_user and smtp_pass:
+                    smtp.login(smtp_user, smtp_pass)
+                
+                smtp.send_message(msg)
             
         return f"✅ Email successfully sent to {recipient_email} with the attachment {pdf_name}"
         
@@ -63,11 +82,12 @@ def main():
     
     print(result)
     
-    # If the direct email function returns an error, exit the script
-    if "❌ Error" in result:
+    # Si falla, abortamos
+    if "❌" in result:
+        print("⚠️ Email failed. Aborting database update.")
         sys.exit(1)
 
-    # 2. "Consume" the news (Mark them as published)
+    # 2. "Consume" the news
     print("🗄️ [DB] Marking sent news items as 'published'...")
     bulletin_path = "/workspace/build/bulletin.json"
     
@@ -75,18 +95,15 @@ def main():
         with open(bulletin_path, "r", encoding="utf-8") as f:
             data = json.load(f)
             
-        # EXTRACT THE IDs (Corrected to read from "sections"!)
         ids_to_publish = []
         for sec in data.get("sections", []):
             if "items" in sec:
                 ids_to_publish.extend([item["id"] for item in sec["items"]])
                     
-        # Update the database
         if ids_to_publish:
             db_url = os.environ.get("DATABASE_URL")
             with psycopg.connect(db_url) as conn:
                 with conn.cursor() as cur:
-                    # We use ANY(%s) to update multiple IDs in a single query
                     cur.execute(
                         "UPDATE items SET status = 'published' WHERE id = ANY(%s)",
                         (ids_to_publish,)
