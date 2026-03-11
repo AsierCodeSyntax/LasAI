@@ -11,8 +11,12 @@ import { SourcesView } from "@/components/views/sources-view"
 import { M2ChartsView } from "@/components/views/news-module-charts"
 import { ComingSoonView } from "@/components/views/coming-soon-view"
 import { TopicsView } from "@/components/views/TopicsView"
+import { M2_Dashboard } from "@/components/views/adierazleak/M2_dashboard"
+import { M2_MonthClose } from "@/components/views/adierazleak/M2_MonthClose"
+import { M2_Vault } from "@/components/views/adierazleak/M2_Vault"
 
-type View = "home" | "module" | "add-news" | "review" | "archive" | "sources" | "m2-charts" | "coming-soon" | "topics"
+
+type View = "home" | "module" | "add-news" | "review" | "archive" | "sources" | "m2-charts" | "coming-soon" | "topics" | "m2-dashboard" | "m2-month-close" | "m2-vault"
 
 export default function Page() {
   const [currentView, setCurrentView] = useState<View>("home")
@@ -31,7 +35,9 @@ export default function Page() {
       {currentView === "m2-charts" && <M2ChartsView onNavigate={setCurrentView} />}
       {currentView === "coming-soon" && <ComingSoonView onNavigate={setCurrentView} />}
       {currentView === "topics" && <TopicsView onNavigate={setCurrentView} />}
-
+      {currentView === "m2-dashboard" && <M2_Dashboard onNavigate={setCurrentView} />}
+      {currentView === "m2-month-close" && <M2_MonthClose onNavigate={setCurrentView} />}
+      {currentView === "m2-vault" && (<M2_Vault onNavigateToDashboard={(monthId) => { setCurrentView("m2-dashboard") }} />)}
     </div>
   )
 }
